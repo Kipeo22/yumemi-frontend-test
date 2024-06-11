@@ -1,6 +1,6 @@
 'use client'
 import axios from 'axios'
-import React, { use, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 export default function PopulationChart() {
   const [total, setTotal] = useState([])
