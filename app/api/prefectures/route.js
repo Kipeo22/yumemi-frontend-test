@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react'
+import { NextResponse } from 'next/server'
 
-const fetchPrefectures = async () => {
+// fetchPrefectures
+
+export async function GET() {
   const response = await fetch('https://opendata.resas-portal.go.jp/api/v1/prefectures', {
     method: 'GET',
     headers: {
@@ -10,12 +12,5 @@ const fetchPrefectures = async () => {
   })
 
   const data = await response.json()
-
-  // if (data.statusCode != 200) {
-  //   throw new Error(data.message)
-  // }
-
-  return data.result
+  return NextResponse.json(data)
 }
-
-export default fetchPrefectures
