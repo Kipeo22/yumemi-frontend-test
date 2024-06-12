@@ -1,8 +1,11 @@
 import { NextResponse } from 'next/server'
 
-export async function GET() {
+export async function GET(req) {
+  const { searchParams } = new URL(req.url)
+  const prefCode = searchParams.get('prefCode')
+
   const response = await fetch(
-    `https://opendata.resas-portal.go.jp/api/v1/population/composition/perYear?cityCode=-&prefCode=1`,
+    `https://opendata.resas-portal.go.jp/api/v1/population/composition/perYear?cityCode=-&prefCode=${prefCode}`,
     {
       method: 'GET',
       headers: {

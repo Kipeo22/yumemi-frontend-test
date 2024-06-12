@@ -9,7 +9,7 @@ export default function Home() {
     <main className={styles.main}>
       <h1>タイトル</h1>
       <PrefectureCheckbox />
-      <PopulationChart />
+      {/* <PopulationChart /> */}
     </main>
   )
 }
