@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 
-export async function GET(req) {
+export async function GET(req: Request): Promise<NextResponse> {
   const { searchParams } = new URL(req.url)
   const prefCode = searchParams.get('prefCode')
 

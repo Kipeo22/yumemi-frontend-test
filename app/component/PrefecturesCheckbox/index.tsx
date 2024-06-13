@@ -1,12 +1,17 @@
 'use client'
 import axios from 'axios'
-import React, { useEffect, useState } from 'react'
+import React, { ChangeEvent, useEffect, useState } from 'react'
 import PopulationChart from '../PopulationChart'
 
+interface Prefecture {
+  prefCode: number
+  prefName: string
+}
+
 export default function PrefectureCheckbox() {
-  const [prefectures, setPrefecture] = useState([])
-  const [selectedPrefCodes, setSelectedPrefCodes] = useState([])
-  const [selectedType, setSelectedType] = useState('総人口')
+  const [prefectures, setPrefecture] = useState<Prefecture[]>([])
+  const [selectedPrefCodes, setSelectedPrefCodes] = useState<number[]>([])
+  const [selectedType, setSelectedType] = useState<string>('総人口')
 
   const getPrefectures = async () => {
     const response = await axios.get('/api/prefectures')
@@ -15,15 +20,14 @@ export default function PrefectureCheckbox() {
     setPrefecture(data.result)
   }
 
-  // getPrefectures()
   useEffect(() => {
     getPrefectures()
   }, [])
 
   // console.log(prefectures)
 
-  const handleCheckboxChange = (event) => {
-    const prefCode = event.target.value
+  const handleCheckboxChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const prefCode = parseInt(event.target.value)
     setSelectedPrefCodes((prevSelected) =>
       event.target.checked
         ? [...prevSelected, prefCode]
@@ -31,7 +35,7 @@ export default function PrefectureCheckbox() {
     )
   }
 
-  const handleTypeChange = (event) => {
+  const handleTypeChange = (event: ChangeEvent<HTMLSelectElement>) => {
     setSelectedType(event.target.value)
   }
 

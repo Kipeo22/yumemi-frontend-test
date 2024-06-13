@@ -28,8 +28,10 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "app/component/PrefectureCheckbox.tsx",
-    "app/api/prefectures.jsefectures.js",
-    "app/component/PopulationChart/index.jsx"
+    "api/prefectures.jsefectures.js",
+    "app/component/PopulationChart/index.tsx",
+    "app/api/prefectures/route.ts",
+    "app/api/population/route.ts"
   ],
   "exclude": ["node_modules"]
 }

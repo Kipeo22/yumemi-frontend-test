@@ -25,35 +25,27 @@ ChartJS.register(
   Legend,
 )
 
-export default function PopulationChart({ selectedPrefCodes, selectedType }) {
-  // const [total, setTotal] = useState([])
-  // const [young, setYoung] = useState([])
-  // const [productive, setProductive] = useState([])
-  // const [old, setOld] = useState([])
+interface PopulationData {
+  year: number
+  value: number
+}
 
-  const [populationData, setPopulationData] = useState([])
+interface PrefecturePopulation {
+  prefCode: number
+  data: PopulationData[]
+}
 
-  // const getPopulations = async () => {
-  //   const response = await axios.get('/api/population?prefCode=${prefCode}')
-  //   const result = await response.data.result
+interface PopulationChartProps {
+  selectedPrefCodes: number[]
+  selectedType: string
+}
 
-  //   console.log(result)
-
-  //   setTotal(result.data[0].data)
-  //   setYoung(result.data[1].data)
-  //   setProductive(result.data[2].data)
-  //   setOld(result.data[3].data)
-  // }
-
-  // useEffect(() => {
-  //   getPopulations()
-  // }, [])
-
-  // console.log(total)
+export default function PopulationChart({ selectedPrefCodes, selectedType }: PopulationChartProps) {
+  const [populationData, setPopulationData] = useState<PrefecturePopulation[]>([])
 
   useEffect(() => {
     const fetchPopulations = async () => {
-      const dataPromises = selectedPrefCodes.map(async (prefCode, selectedType) => {
+      const dataPromises = selectedPrefCodes.map(async (prefCode) => {
         const response = await axios.get(`/api/population?prefCode=${prefCode}`)
         const result = response.data.result.data
 
@@ -85,27 +77,13 @@ export default function PopulationChart({ selectedPrefCodes, selectedType }) {
     } else {
       setPopulationData([])
     }
-  }, [selectedPrefCodes])
-
-  //chart
-  // const options = {
-  //   responsive: true,
-  //   plugins: {
-  //     legend: {
-  //       position: 'top',
-  //     },
-  //     title: {
-  //       display: true,
-  //       text: 'Chart.js Line Chart',
-  //     },
-  //   },
-  // }
+  }, [selectedPrefCodes, selectedType])
 
   const options = {
     responsive: true,
     plugins: {
       legend: {
-        position: 'top',
+        position: 'top' as const,
       },
       title: {
         display: true,
@@ -114,20 +92,7 @@ export default function PopulationChart({ selectedPrefCodes, selectedType }) {
     },
   }
 
-  // const labels = total.map((label) => label.year)
   const labels = populationData[0]?.data.map((label) => label.year) || []
-
-  // const TotalData = {
-  //   labels,
-  //   datasets: [
-  //     {
-  //       label: '総人口',
-  //       data: total.map((total) => total.value),
-  //       borderColor: 'rgb(255, 99, 132)',
-  //       backgroundColor: 'rgba(255, 99, 132, 0.5)',
-  //     },
-  //   ],
-  // }
 
   const datasets = populationData.map((population) => ({
     label: `都道府県コード: ${population.prefCode}`,
@@ -145,7 +110,6 @@ export default function PopulationChart({ selectedPrefCodes, selectedType }) {
     <div>
       <h1>PopulationChart</h1>
 
-      {/* <Line options={options} data={TotalData} /> */}
       {populationData.length > 0 ? (
         <Line options={options} data={chartData} />
       ) : (
