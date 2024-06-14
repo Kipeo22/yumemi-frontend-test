@@ -33,21 +33,25 @@ interface PopulationData {
 
 interface PrefecturePopulation {
   prefCode: number
+  prefName: string
   data: PopulationData[]
 }
 
 interface PopulationChartProps {
-  selectedPrefCodes: number[]
+  selectedPrefectures: { prefCode: number; prefName: string }[]
   selectedType: string
 }
 
-export default function PopulationChart({ selectedPrefCodes, selectedType }: PopulationChartProps) {
+export default function PopulationChart({
+  selectedPrefectures,
+  selectedType,
+}: PopulationChartProps) {
   const [populationData, setPopulationData] = useState<PrefecturePopulation[]>([])
 
   useEffect(() => {
     const fetchPopulations = async () => {
-      const dataPromises = selectedPrefCodes.map(async (prefCode) => {
-        const response = await axios.get(`/api/population?prefCode=${prefCode}`)
+      const dataPromises = selectedPrefectures.map(async (pref) => {
+        const response = await axios.get(`/api/population?prefCode=${pref.prefCode}`)
         const result = response.data.result.data
 
         let typeIndex = 0
@@ -66,19 +70,19 @@ export default function PopulationChart({ selectedPrefCodes, selectedType }: Pop
             break
         }
 
-        return { prefCode, data: result[typeIndex].data }
+        return { prefCode: pref.prefCode, prefName: pref.prefName, data: result[typeIndex].data }
       })
 
       const populationResults = await Promise.all(dataPromises)
       setPopulationData(populationResults)
     }
 
-    if (selectedPrefCodes.length > 0) {
+    if (selectedPrefectures.length > 0) {
       fetchPopulations()
     } else {
       setPopulationData([])
     }
-  }, [selectedPrefCodes, selectedType])
+  }, [selectedPrefectures, selectedType])
 
   const options = {
     responsive: true,
@@ -96,7 +100,7 @@ export default function PopulationChart({ selectedPrefCodes, selectedType }: Pop
   const labels = populationData[0]?.data.map((label) => label.year) || []
 
   const datasets = populationData.map((population) => ({
-    label: ` ${population.prefCode}`,
+    label: `${population.prefName}`,
     data: population.data.map((item) => item.value),
     borderColor: `rgb(${255 - population.prefCode * 5}, ${population.prefCode * 5}, ${255 - population.prefCode})`,
     backgroundColor: `rgba(${255 - population.prefCode * 5}, ${population.prefCode * 5}, ${255 - population.prefCode}, 0.5)`,

@@ -9,16 +9,19 @@ interface Prefecture {
   prefName: string
 }
 
+interface SelectedPrefecture {
+  prefCode: number
+  prefName: string
+}
+
 export default function PrefectureCheckbox() {
   const [prefectures, setPrefecture] = useState<Prefecture[]>([])
-  const [selectedPrefCodes, setSelectedPrefCodes] = useState<number[]>([])
-
+  const [selectedPrefectures, setSelectedPrefectures] = useState<SelectedPrefecture[]>([])
   const [selectedType, setSelectedType] = useState<string>('総人口')
 
   const getPrefectures = async () => {
     const response = await axios.get('/api/prefectures')
     const data = await response.data
-
     setPrefecture(data.result)
   }
 
@@ -26,14 +29,14 @@ export default function PrefectureCheckbox() {
     getPrefectures()
   }, [])
 
-  // console.log(prefectures)
-
   const handleCheckboxChange = (event: ChangeEvent<HTMLInputElement>) => {
     const prefCode = parseInt(event.target.value)
-    setSelectedPrefCodes((prevSelected) =>
+    const prefName = event.target.name
+
+    setSelectedPrefectures((prevSelected) =>
       event.target.checked
-        ? [...prevSelected, prefCode]
-        : prevSelected.filter((code) => code !== prefCode),
+        ? [...prevSelected, { prefCode, prefName }]
+        : prevSelected.filter((pref) => pref.prefCode !== prefCode),
     )
   }
 
@@ -46,18 +49,17 @@ export default function PrefectureCheckbox() {
       <div className='PrefSelect'>
         <h2>都道府県名</h2>
         <ul className='box-container'>
-          {prefectures
-            ? prefectures.map((prefecture) => (
-                <li key={prefecture.prefCode} className='checkbox'>
-                  <input
-                    type='checkbox'
-                    value={prefecture.prefCode}
-                    onChange={handleCheckboxChange}
-                  />
-                  {prefecture.prefName}
-                </li>
-              ))
-            : null}
+          {prefectures.map((prefecture) => (
+            <li key={prefecture.prefCode} className='checkbox'>
+              <input
+                type='checkbox'
+                value={prefecture.prefCode}
+                name={prefecture.prefName}
+                onChange={handleCheckboxChange}
+              />
+              {prefecture.prefName}
+            </li>
+          ))}
         </ul>
       </div>
 
@@ -73,7 +75,7 @@ export default function PrefectureCheckbox() {
         </label>
       </div>
 
-      <PopulationChart selectedPrefCodes={selectedPrefCodes} selectedType={selectedType} />
+      <PopulationChart selectedPrefectures={selectedPrefectures} selectedType={selectedType} />
     </>
   )
 }
