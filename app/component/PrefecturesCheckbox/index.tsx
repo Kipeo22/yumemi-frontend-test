@@ -2,6 +2,7 @@
 import axios from 'axios'
 import React, { ChangeEvent, useEffect, useState } from 'react'
 import PopulationChart from '../PopulationChart'
+import './style.css'
 
 interface Prefecture {
   prefCode: number
@@ -42,10 +43,10 @@ export default function PrefectureCheckbox() {
   return (
     <div>
       <h2>都道府県名</h2>
-      <ul>
+      <ul className='box-container'>
         {prefectures
           ? prefectures.map((prefecture) => (
-              <li key={prefecture.prefCode}>
+              <li key={prefecture.prefCode} className='checkbox'>
                 <input
                   type='checkbox'
                   value={prefecture.prefCode}
