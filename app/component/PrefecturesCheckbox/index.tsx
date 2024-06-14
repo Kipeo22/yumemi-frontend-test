@@ -12,6 +12,7 @@ interface Prefecture {
 export default function PrefectureCheckbox() {
   const [prefectures, setPrefecture] = useState<Prefecture[]>([])
   const [selectedPrefCodes, setSelectedPrefCodes] = useState<number[]>([])
+
   const [selectedType, setSelectedType] = useState<string>('総人口')
 
   const getPrefectures = async () => {
@@ -41,32 +42,38 @@ export default function PrefectureCheckbox() {
   }
 
   return (
-    <div>
-      <h2>都道府県名</h2>
-      <ul className='box-container'>
-        {prefectures
-          ? prefectures.map((prefecture) => (
-              <li key={prefecture.prefCode} className='checkbox'>
-                <input
-                  type='checkbox'
-                  value={prefecture.prefCode}
-                  onChange={handleCheckboxChange}
-                />
-                {prefecture.prefName}
-              </li>
-            ))
-          : null}
-      </ul>
+    <>
+      <div className='PrefSelect'>
+        <h2>都道府県名</h2>
+        <ul className='box-container'>
+          {prefectures
+            ? prefectures.map((prefecture) => (
+                <li key={prefecture.prefCode} className='checkbox'>
+                  <input
+                    type='checkbox'
+                    value={prefecture.prefCode}
+                    onChange={handleCheckboxChange}
+                  />
+                  {prefecture.prefName}
+                </li>
+              ))
+            : null}
+        </ul>
+      </div>
 
-      <label htmlFor='populationType'>人口構成タイプ: </label>
-      <select id='populationType' value={selectedType} onChange={handleTypeChange}>
-        <option value='総人口'>総人口</option>
-        <option value='年少人口'>年少人口</option>
-        <option value='生産年齢人口'>生産年齢人口</option>
-        <option value='老年人口'>老年人口</option>
-      </select>
+      <div className='typeSelect'>
+        <h2>表示する人口構成タイプ</h2>
+        <label className='select-box'>
+          <select id='populationType' value={selectedType} onChange={handleTypeChange}>
+            <option value='総人口'>総人口</option>
+            <option value='年少人口'>年少人口</option>
+            <option value='生産年齢人口'>生産年齢人口</option>
+            <option value='老年人口'>老年人口</option>
+          </select>
+        </label>
+      </div>
 
       <PopulationChart selectedPrefCodes={selectedPrefCodes} selectedType={selectedType} />
-    </div>
+    </>
   )
 }

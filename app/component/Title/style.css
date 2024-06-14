@@ -1,0 +1,18 @@
+.title {
+  background-color: #f97216;
+  /* margin: 3%; */
+  padding: 3%;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+h1 {
+  color: #ffffff;
+  text-align: center;
+}
+
+p {
+  text-align: center;
+  color: #ffffff;
+}

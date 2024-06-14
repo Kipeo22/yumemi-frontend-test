@@ -13,6 +13,7 @@ import {
 } from 'chart.js'
 import React, { useEffect, useState } from 'react'
 import { Line } from 'react-chartjs-2'
+import './style.css'
 
 ChartJS.register(
   LineElement,
@@ -95,10 +96,10 @@ export default function PopulationChart({ selectedPrefCodes, selectedType }: Pop
   const labels = populationData[0]?.data.map((label) => label.year) || []
 
   const datasets = populationData.map((population) => ({
-    label: `都道府県コード: ${population.prefCode}`,
+    label: ` ${population.prefCode}`,
     data: population.data.map((item) => item.value),
-    borderColor: 'rgb(255, 99, 132)',
-    backgroundColor: 'rgba(255, 99, 132, 0.5)',
+    borderColor: `rgb(${255 - population.prefCode * 5}, ${population.prefCode * 5}, ${255 - population.prefCode})`,
+    backgroundColor: `rgba(${255 - population.prefCode * 5}, ${population.prefCode * 5}, ${255 - population.prefCode}, 0.5)`,
   }))
 
   const chartData = {
@@ -107,9 +108,7 @@ export default function PopulationChart({ selectedPrefCodes, selectedType }: Pop
   }
 
   return (
-    <div>
-      <h1>PopulationChart</h1>
-
+    <div className='chart-box'>
       {populationData.length > 0 ? (
         <Line options={options} data={chartData} />
       ) : (
