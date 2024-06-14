@@ -43,12 +43,18 @@ export default function PrefectureCheckbox() {
     <div>
       <h2>都道府県名</h2>
       <ul>
-        {prefectures.map((prefecture) => (
-          <li key={prefecture.prefCode}>
-            <input type='checkbox' value={prefecture.prefCode} onChange={handleCheckboxChange} />
-            {prefecture.prefName}
-          </li>
-        ))}
+        {prefectures
+          ? prefectures.map((prefecture) => (
+              <li key={prefecture.prefCode}>
+                <input
+                  type='checkbox'
+                  value={prefecture.prefCode}
+                  onChange={handleCheckboxChange}
+                />
+                {prefecture.prefName}
+              </li>
+            ))
+          : null}
       </ul>
 
       <label htmlFor='populationType'>人口構成タイプ: </label>
